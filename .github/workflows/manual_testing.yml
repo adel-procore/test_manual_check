@@ -1,0 +1,11 @@
+name: manual testing
+
+on:
+  workflow_dispatch:
+
+jobs:
+  test_that:
+      runs-on: ubuntu-latest
+      steps:
+        - name: run test_that
+          run: echo "I tested this PR"

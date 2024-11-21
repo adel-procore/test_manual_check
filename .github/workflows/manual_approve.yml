@@ -2,7 +2,7 @@ name: Manual PR Approval
 
 on:
   pull_request:
-    types: [labeled]  # Trigger when a label is added to the PR
+    types: [labeled, unlabeled]  # Trigger when a label is added or removed from the PR
 
 jobs:
   approve-pr:
@@ -14,8 +14,12 @@ jobs:
 
       - name: Check for 'tested' label
         run: |
-          # Check if the label is 'tested'
-          if [[ "${{ github.event.label.name }}" == "tested" ]]; then
+          # Get the current list of labels for the PR
+          LABELS=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            "https://api.github.com/repos/${{ github.repository }}/issues/${{ github.event.pull_request.number }}/labels")
+          
+          # Check if the 'tested' label is present
+          if echo "$LABELS" | grep -q '"name": "tested"'; then
             echo "Found 'tested' label, allowing merge."
             exit 0  # Workflow passes, enabling merge
           else

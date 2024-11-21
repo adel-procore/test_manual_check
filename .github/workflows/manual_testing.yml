@@ -1,11 +1,35 @@
-name: manual testing
+name: Manual Status Check
 
 on:
   workflow_dispatch:
+    inputs:
+      check-type:
+        description: 'Type of check to run'
+        required: true
+        default: 'lint'
+        type: choice
+        options:
+          - lint
+          - tests
+          - deploy
 
 jobs:
-  test_that:
-      runs-on: ubuntu-latest
-      steps:
-        - name: run test_that
-          run: echo "I tested this PR"
+  check-status:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Run Manual Status Check
+        run: |
+          if [ "${{ github.event.inputs.check-type }}" == "lint" ]; then
+            echo "Running lint check..."
+            # Add your linting command here
+          elif [ "${{ github.event.inputs.check-type }}" == "tests" ]; then
+            echo "Running tests..."
+            # Add your test command here
+          else
+            echo "Running deploy check..."
+            # Add your deploy command here
+          fi

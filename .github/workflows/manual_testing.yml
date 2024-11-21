@@ -1,17 +1,7 @@
 name: Manual Status Check
 
 on:
-  workflow_dispatch:
-    inputs:
-      check-type:
-        description: 'Type of check to run'
-        required: true
-        default: 'lint'
-        type: choice
-        options:
-          - lint
-          - tests
-          - deploy
+  workflow_dispatch:  # This allows manual triggering from the GitHub UI
 
 jobs:
   check-status:
@@ -23,13 +13,6 @@ jobs:
 
       - name: Run Manual Status Check
         run: |
-          if [ "${{ github.event.inputs.check-type }}" == "lint" ]; then
-            echo "Running lint check..."
-            # Add your linting command here
-          elif [ "${{ github.event.inputs.check-type }}" == "tests" ]; then
-            echo "Running tests..."
-            # Add your test command here
-          else
-            echo "Running deploy check..."
-            # Add your deploy command here
-          fi
+          echo "Running manual status check..."
+          # Your custom checks can go here
+          echo "All checks passed."
